@@ -1,0 +1,231 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Polluters Menu Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: screen picker on top, 16:9 game screen mockup below; the screen reproduces the real menu flow */
+:root {
+  --bg: #07110d;
+  --surface: #0f1f18;
+  --ink: #e8f5ec;
+  --muted: #8fb3a0;
+  --accent: #5ee08a;
+  --danger: #e0645e;
+  --gold: #f2d36b;
+  --font-display: "Chakra Petch", "Segoe UI", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); margin: 0;
+  padding-block: 24px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-family: var(--font-display); font-size: 1.4rem; margin: 0; text-wrap: balance; }
+p.note { color: var(--muted); margin: 4px 0 0; font-size: .9rem; max-width: 65ch; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tabs button { font: 500 .9rem var(--font-body); color: var(--muted); background: var(--surface); border: 1px solid #ffffff1f; border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.tabs button[aria-pressed="true"] { color: #07140e; background: var(--accent); border-color: var(--accent); }
+button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.screen { position: relative; aspect-ratio: 16 / 9; min-height: 440px; overflow: hidden; border-radius: 14px; border: 1px solid #ffffff1f;
+  background: linear-gradient(#0a1613, #14352a); container-type: inline-size; }
+canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.game { position: absolute; inset: 0; display: none; background: linear-gradient(#1b2a24 0 55%, #3a3326 55% 100%); }
+.game.on { display: block; }
+.game .robot { position: absolute; left: 22%; bottom: 30%; width: 7%; aspect-ratio: 1; background: var(--accent); border-radius: 22%; }
+.game .truck { position: absolute; left: 55%; bottom: 30%; width: 14%; aspect-ratio: 2 / 1; background: #6b6a60; border-radius: 8%; }
+.game .grass { position: absolute; left: 0; bottom: 0; width: 38%; height: 45%; background: #2f7d4a; opacity: .55; }
+.game .dim { position: absolute; inset: 0; background: #020a07b8; }
+
+.layout { position: absolute; inset: 0; display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 4cqw; padding: 5cqw; }
+.layout.center { grid-template-columns: 1fr; justify-items: center; overflow: auto; padding: 2cqw; }
+.hero small { color: var(--muted); font-size: max(10px, 1.3cqw); letter-spacing: .12em; }
+.hero h2 { font-family: var(--font-display); font-weight: 700; font-size: 8cqw; line-height: 1; margin: .6cqw 0 0; letter-spacing: .02em; }
+.hero h3 { font-family: var(--font-display); color: var(--accent); font-size: 3.6cqw; margin: 0; font-weight: 500; animation: glow 3s ease-in-out infinite; }
+.hero p { color: var(--muted); font-size: max(11px, 1.7cqw); margin: 3cqw 0 0; }
+@keyframes glow { 50% { opacity: .65; } }
+@media (prefers-reduced-motion: reduce) { .hero h3 { animation: none; } }
+
+.panel { background: #0f1c16f2; border: 2px solid #5ee08a59; border-radius: 18px; padding: 2.4cqw 2.6cqw; display: grid; gap: 1.1cqw; width: min(100%, 46cqw); }
+.panel.wide { width: min(100%, 52cqw); gap: .9cqw; padding: 1.8cqw 2.4cqw; }
+.panel .cap { color: var(--muted); font-size: max(10px, 1.3cqw); letter-spacing: .1em; text-transform: uppercase; }
+.panel .ttl { font-family: var(--font-display); color: var(--accent); font-size: 3cqw; font-weight: 700; }
+.panel hr { border: 0; border-top: 1px solid #ffffff1f; width: 100%; margin: .2cqw 0; }
+.b { font: 500 max(12px, 1.7cqw) var(--font-body); color: var(--ink); text-align: center; padding: 1.2cqw 1.6cqw; border-radius: 12px; background: #ffffff0f; border: 1px solid #ffffff1f; cursor: pointer; }
+.b:hover, .b:focus-visible { background: #5ee08a29; border-color: var(--accent); }
+.b.primary { background: var(--accent); color: #07140e; font-weight: 700; font-size: max(13px, 2cqw); border-color: transparent; }
+.b.primary:hover, .b.primary:focus-visible { background: #8bf0ad; border-color: #fff; }
+.b.danger:hover, .b.danger:focus-visible { color: var(--danger); border-color: var(--danger); background: #e0645e2e; }
+.row { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 1cqw; align-items: center; font-size: max(11px, 1.5cqw); }
+.row output { color: var(--muted); min-width: 4ch; text-align: right; }
+input[type=range] { accent-color: var(--accent); width: 100%; }
+.chk { display: flex; justify-content: space-between; align-items: center; font-size: max(11px, 1.5cqw); }
+.chk input { accent-color: var(--accent); width: 1.1em; height: 1.1em; }
+.lines { display: grid; gap: .8cqw; font-size: max(11px, 1.45cqw); line-height: 1.45; }
+.confirm { text-align: center; font-size: max(12px, 1.8cqw); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1cqw; }
+.c { text-align: center; }
+
+/* results screen */
+.top { display: flex; justify-content: center; align-items: center; gap: 4cqw; }
+.rank { text-align: center; }
+.rank b { display: block; font-family: var(--font-display); font-size: 8cqw; line-height: 1; color: var(--accent); }
+.score b { display: block; font-family: var(--font-display); font-size: 4.6cqw; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.score .best { color: var(--gold); font-size: max(11px, 1.5cqw); }
+.stats { display: grid; grid-template-columns: 1fr auto; gap: .6cqw 5cqw; font-size: max(11px, 1.6cqw); }
+.stats span:nth-child(odd) { color: var(--muted); }
+.stats span:nth-child(even) { text-align: right; font-variant-numeric: tabular-nums; font-size: max(12px, 1.9cqw); }
+.env { display: flex; justify-content: space-between; font-size: max(11px, 1.6cqw); color: var(--muted); }
+.env output { color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar { height: max(8px, 1.1cqw); background: #ffffff1a; border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 10%; background: var(--accent); border-radius: 99px; }
+@media (max-width: 640px) { .layout { grid-template-columns: 1fr; align-content: center; overflow: auto; } .hero h2 { font-size: 15cqw; } .hero h3 { font-size: 6cqw; } .hero p { display: none; } .panel, .panel.wide { width: 100%; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Polluters Menu Preview</h1>
+    <p class="note">A clickable web mockup of the three Godot screens. Use the buttons below to switch screens; every button inside the screen works like the real menu.</p>
+  </header>
+  <div class="tabs" role="group" aria-label="Choose screen">
+    <button type="button" id="t-main" aria-pressed="true">Main Menu</button>
+    <button type="button" id="t-pause" aria-pressed="false">In-Game Pause</button>
+    <button type="button" id="t-over" aria-pressed="false">Game Over</button>
+  </div>
+  <div class="screen" id="screen">
+    <canvas id="cv"></canvas>
+    <div class="game" id="game"><div class="grass"></div><div class="truck"></div><div class="robot"></div><div class="dim"></div></div>
+    <div class="layout" id="layout"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var layout = document.getElementById('layout'), game = document.getElementById('game');
+  var mode = 'main', timers = [];
+  var vals = { Master: 80, Music: 80, SFX: 80 };
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function el(h) { var t = document.createElement('template'); t.innerHTML = h.trim(); return t.content.firstChild; }
+  function hero() {
+    return el('<div class="hero"><small>2D ACTION · SURVIVAL · ROGUELITE</small><h2>POLLUTERS</h2><h3>REPAIR THE EARTH</h3><p>Repair. Reprogram. Bring the Earth back to life.</p></div>');
+  }
+  function show(panelHtml, handlers, center) {
+    timers.forEach(clearInterval); timers = [];
+    layout.className = 'layout' + (center ? ' center' : '');
+    layout.innerHTML = '';
+    if (mode === 'main') layout.appendChild(hero());
+    var p = el(panelHtml);
+    layout.appendChild(p);
+    Object.keys(handlers || {}).forEach(function (k) {
+      var n = p.querySelector('[data-a="' + k + '"]');
+      if (n) n.addEventListener('click', handlers[k]);
+    });
+    return p;
+  }
+  var B = function (a, t, c) { return '<button type="button" class="b ' + (c || '') + '" data-a="' + a + '">' + t + '</button>'; };
+  var center = function () { return mode !== 'main'; };
+
+  function menu() {
+    if (mode === 'main') {
+      show('<div class="panel"><div class="cap">Main Menu</div>' + B('play', '▶  PLAY', 'primary') + B('how', 'How to Play') + B('mach', 'Machines and Equipment') + B('set', 'Settings') + B('about', 'About') + '<hr>' + B('quit', 'Quit', 'danger') + '</div>', {
+        play: function () { setMode('pause'); }, how: how, mach: mach, set: settings, about: about, quit: function () { confirmBox('Are you sure you want to quit the game?', 'Quit'); }
+      });
+    } else if (mode === 'pause') {
+      show('<div class="panel"><div class="ttl c">PAUSED</div><div class="cap c">Systems on standby. The Earth is waiting for you.</div><hr>' + B('res', '▶  Resume', 'primary') + B('ctl', 'Controls') + B('set', 'Settings') + B('rst', 'Restart Level') + '<hr>' + B('home', 'Return to Main Menu', 'danger') + B('quit', 'Quit Game', 'danger') + '</div>', {
+        res: function () { layout.innerHTML = ''; game.querySelector('.dim').style.display = 'none'; layout.appendChild(el('<div class="panel"><div class="cap c">Game running</div>' + B('again', 'Pause again (ESC)') + '</div>')); layout.querySelector('[data-a=again]').onclick = function () { game.querySelector('.dim').style.display = ''; menu(); }; },
+        ctl: controls, set: settings,
+        rst: function () { confirmBox('The level will start over. Do you want to continue?', 'Restart'); },
+        home: function () { confirmBox('Unsaved progress will be lost. Return to the main menu?', 'Main Menu', function () { setMode('main'); }); },
+        quit: function () { confirmBox('Are you sure you want to quit the game?', 'Quit'); }
+      }, true);
+    } else { results(); }
+  }
+  function info(title, lines) {
+    show('<div class="panel"><div class="ttl">' + title + '</div><hr><div class="lines">' + lines.map(function (l) { return '<div>' + l + '</div>'; }).join('') + '</div>' + B('back', '← Back') + '</div>', { back: menu }, center());
+  }
+  function how() { info('HOW TO PLAY', ['You never destroy anything. You repair malfunctioning machines.', '<b>1) Scan</b> finds faulty sensors and commands.', '<b>2) Stabilize</b> temporarily disables the machine.', '<b>3) Reprogram</b> fixes the software and makes it your ally.']); }
+  function mach() { info('MACHINES AND EQUIPMENT', ['Garbage Truck → collects waste from the ground.', 'Smoke Vehicle → filters harmful gases.', 'Plastic Drone → collects plastic waste.', 'Oil Tanker → cleans up oil spills.', 'Equipment: EMP Pulse, Advanced Scanner, Fast Reprogramming, Multi Hack, Repair Drone, System Override.']); }
+  function about() { info('ABOUT', ['POLLUTERS: REPAIR THE EARTH', 'To save the Earth we do not need to destroy everything. We need to repair what we broke.', 'Made with Godot 4.']); }
+  function controls() { info('CONTROLS', ['Move: WASD / Arrow keys', 'Scan: Left mouse button', 'Stabilize: Right mouse button', 'Reprogram: Space (hold)', 'Pause: ESC or P']); }
+  function confirmBox(msg, yes, onYes) {
+    show('<div class="panel"><div class="confirm">' + msg + '</div><div class="pair">' + B('no', 'Cancel') + B('yes', yes, 'danger') + '</div></div>', { no: menu, yes: onYes || menu }, center());
+  }
+  function slider(name, label) {
+    return '<label class="row"><span>' + label + '</span><input type="range" min="0" max="100" value="' + vals[name] + '" data-s="' + name + '"><output>' + vals[name] + '%</output></label>';
+  }
+  function chk(label, on) { return '<label class="chk"><span>' + label + '</span><input type="checkbox"' + (on ? ' checked' : '') + '></label>'; }
+  function settings() {
+    var p = show('<div class="panel"><div class="ttl">SETTINGS</div><hr><div class="cap">Audio</div>' + slider('Master', 'Master Volume') + slider('Music', 'Music') + slider('SFX', 'Sound Effects') + '<div class="cap">Display</div>' + chk('Fullscreen', false) + chk('Vertical Sync (VSync)', true) + '<div class="cap">Gameplay</div>' + chk('Screen Shake', true) + B('back', 'Save and Go Back', 'primary') + '</div>', { back: menu }, center());
+    p.querySelectorAll('input[type=range]').forEach(function (r) {
+      r.addEventListener('input', function () { vals[r.dataset.s] = r.value; r.nextElementSibling.textContent = r.value + '%'; });
+    });
+  }
+
+  // Game over / results screen with count-up animation
+  var DATA = { score: 12360, machines: 12, mTotal: 15, waste: 340, areas: 4, aTotal: 6, carbon: 128, secs: 522, before: 10, after: 72 };
+  function commas(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function results() {
+    var p = show('<div class="panel wide"><div class="cap c">Mission Report</div><div class="ttl c" style="font-size:4.2cqw">EARTH RESTORED</div><div class="cap c" style="text-transform:none;letter-spacing:0">Every machine you repaired helped nature recover.</div><hr>' +
+      '<div class="top"><div class="rank"><div class="cap">Rank</div><b id="r-rank" style="opacity:0">A</b></div><div class="score"><div class="cap">Score</div><b id="r-score">0</b><span class="best">NEW BEST!</span></div></div><hr>' +
+      '<div class="stats"><span>Machines Repaired</span><span id="r0"></span><span>Waste Collected</span><span id="r1"></span><span>Areas Restored</span><span id="r2"></span><span>Carbon Cleaned</span><span id="r3"></span><span>Time</span><span id="r4"></span></div>' +
+      '<div class="env"><span>Environment Health</span><output id="r-env"></output></div><div class="bar"><i id="r-bar"></i></div><hr>' +
+      B('again', '▶  Play Again', 'primary') + '<div class="pair">' + B('menu', 'Main Menu') + B('quit', 'Quit', 'danger') + '</div></div>', {
+        again: function () { setMode('pause'); }, menu: function () { setMode('main'); }, quit: function () { confirmBox('Are you sure you want to quit the game?', 'Quit', results); }
+      }, true);
+    var d = DATA, fmt = [
+      function (x) { return Math.round(x) + ' / ' + d.mTotal; },
+      function (x) { return commas(x) + ' kg'; },
+      function (x) { return Math.round(x) + ' / ' + d.aTotal; },
+      function (x) { return commas(x) + ' kg CO₂'; },
+      function (x) { x = Math.floor(x); return String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0'); }
+    ], tgt = [d.machines, d.waste, d.areas, d.carbon, d.secs];
+    var start = performance.now(), dur = still ? 1 : 1100;
+    function render(k) {
+      var e = 1 - Math.pow(1 - k, 3);
+      p.querySelector('#r-score').textContent = commas(d.score * e);
+      for (var i = 0; i < 5; i++) p.querySelector('#r' + i).textContent = fmt[i](tgt[i] * e);
+      var env = d.before + (d.after - d.before) * e;
+      p.querySelector('#r-bar').style.width = env + '%';
+      p.querySelector('#r-env').textContent = d.before + '%  →  ' + Math.round(env) + '%';
+    }
+    var rk = p.querySelector('#r-rank');
+    function tick(now) {
+      var k = Math.min(1, (now - start) / dur); render(k);
+      if (k < 1 && p.isConnected) requestAnimationFrame(tick); else { rk.style.opacity = 1; if (!still) rk.animate([{ transform: 'scale(1.6)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 350, easing: 'cubic-bezier(.3,1.5,.5,1)' }); }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function setMode(m) {
+    mode = m;
+    game.classList.toggle('on', m !== 'main');
+    game.querySelector('.dim').style.display = '';
+    ['main', 'pause', 'over'].forEach(function (k) { document.getElementById('t-' + k).setAttribute('aria-pressed', k === m); });
+    menu();
+  }
+  ['main', 'pause', 'over'].forEach(function (k) { document.getElementById('t-' + k).onclick = function () { setMode(k); }; });
+
+  // Background particles
+  var cv = document.getElementById('cv'), cx = cv.getContext('2d'), ps = [], W, H;
+  function fit() { var r = cv.getBoundingClientRect(); W = cv.width = r.width; H = cv.height = r.height; }
+  fit(); window.addEventListener('resize', fit);
+  for (var i = 0; i < 42; i++) ps.push({ x: Math.random(), y: Math.random(), v: .01 + Math.random() * .035, s: 2 + Math.random() * 3.5, ph: Math.random() * 6.28, g: Math.random() > .35 });
+  var t0 = 0;
+  function frame(t) {
+    var dt = (t - t0) / 1000 || 0; t0 = t;
+    cx.clearRect(0, 0, W, H);
+    ps.forEach(function (p) {
+      if (!still) p.y -= p.v * dt;
+      if (p.y < -.05) { p.y = 1.05; p.x = Math.random(); }
+      cx.fillStyle = p.g ? 'rgba(94,224,138,' + (.2 + .12 * Math.sin(t / 1000 + p.ph)) + ')' : 'rgba(127,184,214,' + (.2 + .1 * Math.sin(t / 1000 + p.ph)) + ')';
+      cx.beginPath(); cx.arc(p.x * W + Math.sin(t / 1250 + p.ph) * 16, p.y * H, p.s, 0, 6.28); cx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  menu();
+})();
+</script>
+
+</body></html>
